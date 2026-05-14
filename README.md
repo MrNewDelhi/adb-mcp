@@ -1,6 +1,6 @@
 # adb-mcp
 
-![ADB MCP story preview](docs/assets/adb-mcp-cover.png)
+![ADB MCP overview](docs/assets/adb-mcp-cover.png)
 
 A broad Android Debug Bridge MCP server for local Android device and emulator automation.
 
@@ -223,13 +223,13 @@ Mirror the emulator:
 scrcpy --serial emulator-5554
 ```
 
-Record a tutorial clip while mirroring:
+Record a device session while mirroring:
 
 ```bash
 scrcpy --serial emulator-5554 --record adb-mcp-demo.mp4
 ```
 
-Useful tutorial-friendly settings:
+Useful recording settings:
 
 ```bash
 scrcpy --serial emulator-5554 --max-size=1280 --max-fps=60 --no-audio --window-title "adb-mcp AVD demo"
@@ -256,23 +256,6 @@ For a website that shows the live device screen, the practical choices are:
 - Use Vysor remote sharing.
 - Use scrcpy to record a video file and embed that recording.
 - Build a custom bridge that captures frames with `adb_screencap` or scrcpy and serves them over WebSocket/WebRTC.
-
-### 7. Tutorial video outline
-
-Use this as the script for a screen recording or Hyperframes-style generated tutorial:
-
-1. Show Android Studio Device Manager and create `Pixel_API_35`.
-2. Start the emulator with `emulator -avd Pixel_API_35`.
-3. Run `adb devices -l` and show `emulator-5554`.
-4. Start `adb-mcp` with `npm start`.
-5. In the MCP client, call `adb_devices(long=true)`.
-6. Call `adb_diagnostics(serial="emulator-5554")`.
-7. Call `adb_screencap(serial="emulator-5554", outputPath="/tmp/avd.png")`.
-8. Launch mirroring with `scrcpy --serial emulator-5554 --record adb-mcp-demo.mp4`.
-9. Install or launch an example app with `adb_install` and `adb_app_control`.
-10. End by showing `adb_logcat` and the saved tutorial recording.
-
-Note: the `hyperframes` plugin is not required by this repo. If your Codex environment has that plugin installed, use the outline above as the source storyboard and the scrcpy recording as live footage.
 
 ## Tool groups
 
