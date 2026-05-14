@@ -112,7 +112,7 @@ If `adb` is not on your `PATH`, set `ADB_PATH` to the full Android Platform Tool
 
 The revamped repository is organized around MCP components instead of one large server file. The executable entrypoint creates a stdio MCP server, registers ADB tools, exposes a compact resource, and provides a reusable triage prompt.
 
-![ADB MCP architecture](https://raw.githubusercontent.com/MrNewDelhi/adb-mcp/main/docs/assets/adb-mcp-architecture.svg)
+![ADB MCP architecture](https://raw.githubusercontent.com/MrNewDelhi/adb-mcp/main/docs/assets/adb-mcp-architecture.png)
 
 The main pieces are:
 
