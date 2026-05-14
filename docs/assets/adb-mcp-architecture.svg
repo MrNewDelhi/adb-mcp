@@ -1,89 +1,105 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
   <title id="title">ADB MCP Architecture</title>
-  <desc id="desc">Architecture diagram showing MCP client, stdio transport, adb-mcp server components, adb process boundary, and Android emulator or device target.</desc>
+  <desc id="desc">Architecture diagram showing MCP clients communicating over stdio with an adb-mcp server that validates requests, exposes tools resources and prompts, executes adb, and produces Android diagnostics artifacts.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b1014"/>
-      <stop offset="0.55" stop-color="#111b20"/>
-      <stop offset="1" stop-color="#07110e"/>
+      <stop offset="0" stop-color="#081015"/>
+      <stop offset="0.55" stop-color="#101a20"/>
+      <stop offset="1" stop-color="#07120d"/>
     </linearGradient>
     <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#172229"/>
+      <stop offset="0" stop-color="#18262d"/>
       <stop offset="1" stop-color="#0f171c"/>
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000" flood-opacity="0.35"/>
+    <linearGradient id="server" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#173428"/>
+      <stop offset="1" stop-color="#10202a"/>
+    </linearGradient>
+    <filter id="shadow" x="-18%" y="-18%" width="136%" height="136%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000" flood-opacity="0.38"/>
     </filter>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#60d394"/>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#69e19d"/>
     </marker>
     <style>
-      .title { font: 700 52px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #f4fff8; letter-spacing: 0; }
-      .subtitle { font: 400 24px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #a8c3b6; letter-spacing: 0; }
-      .card-title { font: 700 28px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #f4fff8; letter-spacing: 0; }
-      .card-body { font: 400 19px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #c8d7d0; letter-spacing: 0; }
-      .mono { font: 600 18px "SFMono-Regular", Consolas, monospace; fill: #d8ffe7; letter-spacing: 0; }
-      .pill { font: 700 16px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #07110e; letter-spacing: 0; }
-      .box { fill: url(#card); stroke: #274039; stroke-width: 2; filter: url(#shadow); }
-      .accent { fill: #60d394; }
-      .line { stroke: #60d394; stroke-width: 4; fill: none; marker-end: url(#arrow); }
-      .muted-line { stroke: #31524a; stroke-width: 2; fill: none; }
+      .title { font: 700 58px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #f5fff9; letter-spacing: 0; }
+      .subtitle { font: 400 25px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #b5cfc3; letter-spacing: 0; }
+      .label { font: 700 18px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #08110d; letter-spacing: 0; }
+      .card-title { font: 700 28px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #f5fff9; letter-spacing: 0; }
+      .card-body { font: 400 19px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #c7d9d1; letter-spacing: 0; }
+      .small { font: 400 16px Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #a9beb6; letter-spacing: 0; }
+      .mono { font: 650 17px "SFMono-Regular", Consolas, monospace; fill: #d9ffe8; letter-spacing: 0; }
+      .box { fill: url(#card); stroke: #2a4740; stroke-width: 2; filter: url(#shadow); }
+      .server-box { fill: url(#server); stroke: #3f8066; stroke-width: 3; filter: url(#shadow); }
+      .line { stroke: #69e19d; stroke-width: 5; fill: none; marker-end: url(#arrow); }
+      .thin-line { stroke: #69e19d; stroke-width: 3; fill: none; marker-end: url(#arrow); opacity: 0.85; }
+      .muted-line { stroke: #34584f; stroke-width: 2; fill: none; }
     </style>
   </defs>
-  <rect width="1600" height="900" fill="url(#bg)"/>
-  <circle cx="1360" cy="140" r="220" fill="#60d394" opacity="0.06"/>
-  <circle cx="250" cy="780" r="260" fill="#47b7ff" opacity="0.05"/>
-  <text x="80" y="96" class="title">ADB MCP Architecture</text>
-  <text x="82" y="137" class="subtitle">Android Debug Bridge wrapped as typed MCP tools, resources, and prompts</text>
 
-  <rect x="70" y="240" width="270" height="180" rx="14" class="box"/>
-  <text x="105" y="295" class="card-title">MCP Client</text>
-  <text x="105" y="337" class="card-body">Codex, Claude,</text>
-  <text x="105" y="366" class="card-body">desktop IDE, or CLI</text>
-  <rect x="104" y="235" width="120" height="32" rx="16" fill="#60d394"/>
-  <text x="126" y="257" class="pill">Host app</text>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <circle cx="1660" cy="170" r="260" fill="#69e19d" opacity="0.055"/>
+  <circle cx="320" cy="880" r="300" fill="#47b7ff" opacity="0.05"/>
 
-  <rect x="430" y="240" width="270" height="180" rx="14" class="box"/>
-  <text x="465" y="295" class="card-title">Transport</text>
-  <text x="465" y="338" class="mono">StdioServerTransport</text>
-  <text x="465" y="369" class="card-body">local process boundary</text>
+  <text x="96" y="105" class="title">ADB MCP Architecture</text>
+  <text x="100" y="150" class="subtitle">Android Debug Bridge exposed through typed MCP tools, resources, prompts, and evidence-first workflows</text>
 
-  <rect x="790" y="180" width="360" height="300" rx="18" class="box"/>
-  <text x="830" y="238" class="card-title">adb-mcp Server</text>
-  <text x="830" y="286" class="mono">src/server.ts</text>
-  <line x1="830" y1="312" x2="1110" y2="312" class="muted-line"/>
-  <text x="830" y="352" class="card-body">Tools: 38 ADB actions</text>
-  <text x="830" y="386" class="card-body">Resource: adb://cheatsheet</text>
-  <text x="830" y="420" class="card-body">Prompt: adb_triage</text>
+  <rect x="95" y="255" width="280" height="190" rx="18" class="box"/>
+  <rect x="130" y="235" width="130" height="34" rx="17" fill="#69e19d"/>
+  <text x="155" y="258" class="label">Clients</text>
+  <text x="135" y="315" class="card-title">MCP Host</text>
+  <text x="135" y="360" class="card-body">Codex, Claude, IDE,</text>
+  <text x="135" y="392" class="card-body">desktop app, or CLI</text>
 
-  <rect x="1240" y="240" width="280" height="180" rx="14" class="box"/>
-  <text x="1275" y="295" class="card-title">ADB Runner</text>
-  <text x="1275" y="338" class="mono">src/adb.ts</text>
-  <text x="1275" y="369" class="card-body">spawns platform-tools adb</text>
+  <rect x="470" y="255" width="300" height="190" rx="18" class="box"/>
+  <text x="510" y="315" class="card-title">Transport</text>
+  <text x="510" y="360" class="mono">StdioServerTransport</text>
+  <text x="510" y="392" class="card-body">local MCP process IO</text>
 
-  <rect x="280" y="610" width="320" height="160" rx="14" class="box"/>
-  <text x="315" y="665" class="card-title">Schemas + Helpers</text>
-  <text x="315" y="707" class="card-body">Zod validation, parsers,</text>
-  <text x="315" y="736" class="card-body">paths, quoting, responses</text>
+  <rect x="865" y="195" width="470" height="325" rx="22" class="server-box"/>
+  <text x="910" y="255" class="card-title">adb-mcp Server</text>
+  <text x="910" y="300" class="mono">src/server.ts</text>
+  <line x1="910" y1="326" x2="1285" y2="326" class="muted-line"/>
+  <text x="910" y="366" class="card-body">Tools: 38 structured ADB actions</text>
+  <text x="910" y="402" class="card-body">Resource: adb://cheatsheet</text>
+  <text x="910" y="438" class="card-body">Prompt: adb_triage</text>
+  <text x="910" y="474" class="card-body">Instructions: evidence before changes</text>
 
-  <rect x="760" y="610" width="320" height="160" rx="14" class="box"/>
-  <text x="795" y="665" class="card-title">Artifacts</text>
-  <text x="795" y="707" class="card-body">screenshots, logs, video,</text>
-  <text x="795" y="736" class="card-body">bugreports, diagnostics</text>
+  <rect x="1460" y="255" width="330" height="190" rx="18" class="box"/>
+  <text x="1500" y="315" class="card-title">ADB Runner</text>
+  <text x="1500" y="360" class="mono">src/adb.ts</text>
+  <text x="1500" y="392" class="card-body">spawns platform-tools adb</text>
 
-  <rect x="1200" y="610" width="320" height="160" rx="14" class="box"/>
-  <text x="1235" y="665" class="card-title">Android Target</text>
-  <text x="1235" y="707" class="card-body">emulator, physical device,</text>
-  <text x="1235" y="736" class="card-body">or TCP/IP connected target</text>
+  <rect x="100" y="650" width="335" height="190" rx="18" class="box"/>
+  <text x="140" y="710" class="card-title">Schemas</text>
+  <text x="140" y="754" class="card-body">Zod validation, typed</text>
+  <text x="140" y="786" class="card-body">inputs, serial targeting</text>
 
-  <path d="M 340 330 L 420 330" class="line"/>
-  <path d="M 700 330 L 780 330" class="line"/>
-  <path d="M 1150 330 L 1230 330" class="line"/>
-  <path d="M 1380 420 L 1380 600" class="line"/>
-  <path d="M 960 480 L 930 600" class="line"/>
-  <path d="M 790 430 C 690 515 575 570 510 610" class="line"/>
+  <rect x="530" y="650" width="335" height="190" rx="18" class="box"/>
+  <text x="570" y="710" class="card-title">Tool Modules</text>
+  <text x="570" y="754" class="card-body">device, app, files, logs,</text>
+  <text x="570" y="786" class="card-body">intents, ports, emulator</text>
 
-  <rect x="80" y="810" width="1440" height="46" rx="23" fill="#0e1714" stroke="#274039"/>
-  <text x="110" y="840" class="mono">github.com/MrNewDelhi/adb-mcp</text>
-  <text x="565" y="840" class="card-body">Evidence first. Explicit destructive tools. Typed MCP interface. Raw adb escape hatch.</text>
+  <rect x="960" y="650" width="335" height="190" rx="18" class="box"/>
+  <text x="1000" y="710" class="card-title">Artifacts</text>
+  <text x="1000" y="754" class="card-body">screenshots, recordings,</text>
+  <text x="1000" y="786" class="card-body">bugreports, diagnostics</text>
+
+  <rect x="1455" y="650" width="335" height="190" rx="18" class="box"/>
+  <text x="1495" y="710" class="card-title">Android Target</text>
+  <text x="1495" y="754" class="card-body">emulator, USB device,</text>
+  <text x="1495" y="786" class="card-body">or TCP/IP device</text>
+
+  <path d="M 375 350 L 455 350" class="line"/>
+  <path d="M 770 350 L 850 350" class="line"/>
+  <path d="M 1335 350 L 1445 350" class="line"/>
+  <path d="M 1625 445 L 1625 635" class="line"/>
+
+  <path d="M 940 520 C 800 585 655 615 330 640" class="thin-line"/>
+  <path d="M 1040 520 C 945 585 820 615 700 640" class="thin-line"/>
+  <path d="M 1140 520 C 1125 575 1120 610 1127 640" class="thin-line"/>
+
+  <rect x="96" y="925" width="1728" height="64" rx="32" fill="#0e1714" stroke="#2a4740" stroke-width="2"/>
+  <text x="135" y="965" class="mono">github.com/MrNewDelhi/adb-mcp</text>
+  <text x="640" y="965" class="small">Evidence first. Explicit destructive tools. Typed MCP interface. Raw adb escape hatch.</text>
 </svg>
