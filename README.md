@@ -53,6 +53,14 @@ Or as a package binary:
 adb-mcp
 ```
 
+## Validate
+
+```bash
+npm run test
+```
+
+The test script runs TypeScript checking, builds the server, smoke-tests MCP startup/tool/resource/prompt registration, and validates the bundled Codex skill.
+
 ## MCP config example
 
 ```json
@@ -325,4 +333,20 @@ This server intentionally exposes powerful ADB operations. Many actions can chan
 
 ## Skills
 
-The `skills/adb-mcp` folder contains a Codex-compatible skill that tells agents how to use this MCP server for Android debugging, QA, automation, and triage workflows.
+The `skills/adb-mcp` folder contains a Codex-compatible skill that tells agents how to use and extend this MCP server. It follows progressive disclosure:
+
+- `SKILL.md`: short operational workflow and validation commands
+- `references/mcp-server-design.md`: MCP tools/resources/prompts/transports and implementation best practices
+- `references/mcp-security-testing.md`: security model, high-risk surfaces, and test matrix
+- `references/adb-tool-taxonomy.md`: Android/ADB workflow selection guide
+
+## MCP Implementation Notes
+
+`adb-mcp` currently uses stdio transport, which is the safest default for local MCP clients that spawn the server as a child process. The server exposes:
+
+- **Tools** for ADB actions
+- **A resource** at `adb://cheatsheet`
+- **A prompt** named `adb_triage`
+- **Server instructions** that clients may include in model context
+
+If adding an HTTP transport later, add authentication, host header validation, CORS review, and DNS rebinding protection before exposing it.

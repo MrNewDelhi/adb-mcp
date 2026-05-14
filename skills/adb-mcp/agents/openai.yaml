@@ -1,3 +1,3 @@
 display_name: ADB MCP
-short_description: Debug and automate Android devices through the adb-mcp server.
-default_prompt: Use adb-mcp to inspect connected Android devices, gather evidence, and automate ADB workflows with typed tools before falling back to raw adb commands.
+short_description: Build, test, secure, and operate Android ADB workflows through adb-mcp.
+default_prompt: Use adb-mcp to inspect Android devices, automate ADB workflows, and extend the MCP server using typed tools, resources, prompts, security checks, and smoke tests.

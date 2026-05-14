@@ -170,6 +170,14 @@ function intentArgs(input: {
 const server = new McpServer({
   name: "adb-mcp",
   version: "0.1.0",
+}, {
+  instructions: [
+    "Start with adb_devices before targeting a device unless the user supplied a serial.",
+    "Use the serial argument for every device-specific tool when multiple devices are connected.",
+    "Prefer typed adb-mcp tools for common workflows; use adb_command only for exact or unsupported ADB behavior.",
+    "Collect diagnostics, logs, and screenshots before destructive actions such as uninstall, clear, rm, reboot, settings writes, or raw shell commands.",
+    "Treat bugreports, logs, screenshots, recordings, and pulled files as potentially sensitive artifacts.",
+  ].join(" "),
 });
 
 server.tool(

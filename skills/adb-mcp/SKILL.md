@@ -1,20 +1,35 @@
 ---
 name: adb-mcp
-description: Use when working with the adb-mcp server to inspect, debug, automate, or test Android devices and emulators through Android Debug Bridge tools, including packages, logs, screenshots, shell commands, intents, settings, files, ports, network, battery, display, bugreports, and diagnostics.
+description: Use when working with, extending, reviewing, testing, or safely operating the adb-mcp Model Context Protocol server for Android Debug Bridge automation. Covers Android device/emulator workflows, MCP server components such as tools/resources/prompts/transports, TypeScript SDK implementation patterns, security review, and validation/testing of ADB MCP tools.
 ---
 
 # adb-mcp
 
-Use this skill when an Android task can be handled through the `adb-mcp` MCP server.
+Use this skill when an Android task can be handled through the `adb-mcp` MCP server, or when changing the server itself.
 
-## Workflow
+## Choose Context
+
+- For MCP design or implementation changes, read `references/mcp-server-design.md`.
+- For security review, destructive tool handling, or release readiness, read `references/mcp-security-testing.md`.
+- For Android tool selection and ADB workflow patterns, read `references/adb-tool-taxonomy.md`.
+
+## Operate The Server
 
 1. Start with `adb_devices` unless the user already gave a serial.
-2. If more than one device is connected, pass `serial` explicitly to every device-specific tool.
+2. Pass `serial` explicitly whenever more than one target is connected.
 3. Prefer typed tools for common operations.
-4. Use `adb_command` for exact ADB flags, uncommon subcommands, or newly added platform-tools behavior.
-5. For debugging, collect evidence before changing state: `adb_diagnostics`, `adb_logcat`, `adb_screencap`, `adb_package_info`, and targeted `adb_dumpsys`.
-6. For app workflows, prefer `adb_intent`, `adb_app_control`, `adb_permission`, and `adb_pm_packages` before falling back to `adb_shell`.
+4. Use `adb_command` only for exact ADB flags, uncommon subcommands, or newly added platform-tools behavior.
+5. Collect evidence before changing state: `adb_diagnostics`, `adb_logcat`, `adb_screencap`, `adb_package_info`, and targeted `adb_dumpsys`.
+6. For app workflows, prefer `adb_intent`, `adb_app_control`, `adb_permission`, and `adb_pm_packages` before `adb_shell`.
+
+## Extend The Server
+
+1. Decide whether the feature is a tool, resource, or prompt.
+2. Keep each tool single-purpose with a Zod input schema and a clear description.
+3. Use resources for read-only reference material or generated artifacts.
+4. Use prompts for repeatable user-invoked workflows such as triage.
+5. Add or update tests before considering the change complete.
+6. Update this skill only with durable workflow guidance; put details in references.
 
 ## Safety
 
@@ -31,7 +46,9 @@ Treat these as state-changing or destructive unless the user clearly intends the
 - `adb_backup_restore`
 - Raw `adb_command` and `adb_shell`
 
-## Common Patterns
+Prefer evidence-gathering tools before destructive tools. Do not hide destructive behavior behind a harmless-looking tool name.
+
+## Common Operation Patterns
 
 Device snapshot:
 
@@ -77,3 +94,15 @@ adb_command(args=["shell", "cmd", "package", "resolve-activity", "--brief", "com
 ## Output Handling
 
 Most tools return the executed command, args, exit code, stdout, stderr, and timeout status. File-producing tools return the local output path. When a command fails, inspect `stderr` and retry with a longer `timeoutMs` only when the operation is expected to be slow.
+
+## Validation
+
+Run these checks after server or skill changes:
+
+```bash
+npm run typecheck
+npm run test:mcp
+npm run validate:skill
+```
+
+Use a connected emulator or test device for live ADB verification. If no Android target is available, still run the MCP smoke test because it validates server startup and capability registration without invoking `adb`.
