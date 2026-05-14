@@ -1,6 +1,6 @@
 # adb-mcp Architecture
 
-![ADB MCP architecture](assets/adb-mcp-architecture.svg)
+![ADB MCP architecture](assets/adb-mcp-architecture.png)
 
 `adb-mcp` is organized around MCP primitives and ADB execution boundaries.
 

@@ -351,7 +351,7 @@ The `skills/adb-mcp` folder contains a Codex-compatible skill that tells agents 
 - **A prompt** named `adb_triage`
 - **Server instructions** that clients may include in model context
 
-![ADB MCP architecture](docs/assets/adb-mcp-architecture.svg)
+![ADB MCP architecture](docs/assets/adb-mcp-architecture.png)
 
 If adding an HTTP transport later, add authentication, host header validation, CORS review, and DNS rebinding protection before exposing it.
 
