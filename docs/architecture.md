@@ -1,5 +1,7 @@
 # adb-mcp Architecture
 
+![ADB MCP architecture](assets/adb-mcp-architecture.svg)
+
 `adb-mcp` is organized around MCP primitives and ADB execution boundaries.
 
 ## Runtime Flow

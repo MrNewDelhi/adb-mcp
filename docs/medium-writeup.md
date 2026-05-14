@@ -1,4 +1,6 @@
-# Building an ADB MCP Server: Giving AI Agents Full Android Debug Bridge Superpowers
+# ADB MCP: Android Debug Bridge, Now Agent-Ready
+
+![ADB MCP story preview](https://raw.githubusercontent.com/MrNewDelhi/adb-mcp/main/docs/assets/adb-mcp-cover.png)
 
 ## Subtitle
 
@@ -41,7 +43,7 @@ The goal was not to hide ADB. The goal was to make it agent-friendly.
 
 ## What adb-mcp Can Do
 
-The first version includes 38 MCP tools covering most day-to-day Android debugging and automation tasks:
+The current server includes 38 MCP tools covering most day-to-day Android debugging and automation tasks:
 
 - Device discovery and ADB server control
 - USB and TCP/IP connection management
@@ -104,6 +106,25 @@ Example MCP configuration:
 ```
 
 If `adb` is not on your `PATH`, set `ADB_PATH` to the full Android Platform Tools binary path.
+
+
+## Architecture
+
+The revamped repository is organized around MCP components instead of one large server file. The executable entrypoint creates a stdio MCP server, registers ADB tools, exposes a compact resource, and provides a reusable triage prompt.
+
+![ADB MCP architecture](https://raw.githubusercontent.com/MrNewDelhi/adb-mcp/main/docs/assets/adb-mcp-architecture.svg)
+
+The main pieces are:
+
+- `src/index.ts`: stdio executable entrypoint
+- `src/server.ts`: server metadata, instructions, and component registration
+- `src/adb.ts`: process boundary for platform-tools `adb`
+- `src/tools/adbTools.ts`: 38 typed ADB tools
+- `src/resources.ts`: `adb://cheatsheet`
+- `src/prompts.ts`: `adb_triage`
+- `tests/mcp-smoke.mjs`: MCP startup and capability test
+
+The result is still simple to run locally, but much easier to extend safely.
 
 ## Using It With an Android Virtual Device
 
@@ -230,7 +251,7 @@ For trusted local test devices and emulators, this is exactly what you want. For
 
 ## What Comes Next
 
-The current version is already broad, but there are obvious next steps:
+The current version is already broad and now split into testable components, but there are obvious next steps:
 
 - Add more structured parsers for `dumpsys` output.
 - Add higher-level testing recipes.

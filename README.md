@@ -1,5 +1,7 @@
 # adb-mcp
 
+![ADB MCP story preview](docs/assets/adb-mcp-cover.png)
+
 A broad Android Debug Bridge MCP server for local Android device and emulator automation.
 
 It exposes typed tools for the common ADB surface area and keeps a raw `adb_command` escape hatch for everything else, so agents can use precise ADB behavior without waiting for a wrapper to be added.
@@ -348,6 +350,8 @@ The `skills/adb-mcp` folder contains a Codex-compatible skill that tells agents 
 - **A resource** at `adb://cheatsheet`
 - **A prompt** named `adb_triage`
 - **Server instructions** that clients may include in model context
+
+![ADB MCP architecture](docs/assets/adb-mcp-architecture.svg)
 
 If adding an HTTP transport later, add authentication, host header validation, CORS review, and DNS rebinding protection before exposing it.
 
