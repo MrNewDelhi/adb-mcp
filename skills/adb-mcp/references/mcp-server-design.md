@@ -14,6 +14,18 @@ MCP servers expose three main primitives:
 
 The current server uses `StdioServerTransport`, which is the right default for local, process-spawned MCP integrations. If adding HTTP transport later, add host validation and authentication before exposing it.
 
+## Repository Components
+
+- `src/index.ts`: stdio executable entrypoint.
+- `src/server.ts`: server metadata, instructions, and component registration.
+- `src/adb.ts`: process execution boundary for ADB.
+- `src/schemas.ts`: common Zod schemas.
+- `src/adbHelpers.ts`: ADB parsers, argument helpers, and artifact path helpers.
+- `src/mcpResponses.ts`: MCP response formatting.
+- `src/tools/adbTools.ts`: tool registration.
+- `src/resources.ts`: resource registration.
+- `src/prompts.ts`: prompt registration.
+
 ## Tool Design Rules
 
 Design each tool as a narrow operation:

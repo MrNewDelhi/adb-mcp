@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { ADB_TOOL_COUNT } from "../dist/tools/adbTools.js";
 
 const transport = new StdioClientTransport({
   command: "node",
@@ -15,7 +16,7 @@ try {
   const { tools } = await client.listTools();
   const toolNames = tools.map((tool) => tool.name);
 
-  assert.equal(tools.length, 38, "expected all adb-mcp tools to be registered");
+  assert.equal(tools.length, ADB_TOOL_COUNT, "expected all adb-mcp tools to be registered");
   for (const required of ["adb_command", "adb_devices", "adb_screencap", "adb_logcat", "adb_diagnostics"]) {
     assert.ok(toolNames.includes(required), `missing tool: ${required}`);
   }

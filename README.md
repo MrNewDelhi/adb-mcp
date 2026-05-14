@@ -350,3 +350,5 @@ The `skills/adb-mcp` folder contains a Codex-compatible skill that tells agents 
 - **Server instructions** that clients may include in model context
 
 If adding an HTTP transport later, add authentication, host header validation, CORS review, and DNS rebinding protection before exposing it.
+
+See [docs/architecture.md](docs/architecture.md) for the source layout, component responsibilities, and testing flow.
